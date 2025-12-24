@@ -1,0 +1,289 @@
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from models.product import Product, Review
+from models.user import User
+from schemas.product import (
+    ProductCreate, ProductUpdate, ReviewCreate,
+    ProductResponse, ProductListResponse
+)
+from middleware.auth import get_current_user, require_admin
+from config.settings import settings
+from typing import Optional
+from bson import ObjectId
+from datetime import datetime
+import math
+
+router = APIRouter(prefix="/api/products", tags=["products"])
+
+
+@router.get("/top")
+async def get_top_products():
+    """Get top rated products"""
+    products = await Product.find().sort("-rating").limit(3).to_list()
+    
+    return [
+        ProductResponse(
+            _id=str(product.id),
+            user=str(product.user),
+            name=product.name,
+            image=product.image,
+            brand=product.brand,
+            category=product.category,
+            description=product.description,
+            rating=product.rating,
+            numReviews=product.num_reviews,
+            price=product.price,
+            countInStock=product.count_in_stock,
+            createdAt=product.created_at,
+            updatedAt=product.updated_at
+        )
+        for product in products
+    ]
+
+
+@router.get("", response_model=ProductListResponse)
+async def get_products(
+    keyword: Optional[str] = None,
+    page_number: int = Query(1, alias="pageNumber", ge=1)
+):
+    """Fetch all products with pagination and search"""
+    page_size = settings.PAGINATION_LIMIT
+    skip = page_size * (page_number - 1)
+    
+    # Build query
+    query = {}
+    if keyword:
+        query = {"name": {"$regex": keyword, "$options": "i"}}
+    
+    # Get count and products
+    count = await Product.find(query).count()
+    products = await Product.find(query).skip(skip).limit(page_size).to_list()
+    
+    pages = math.ceil(count / page_size) if count > 0 else 1
+    
+    return ProductListResponse(
+        products=[
+            ProductResponse(
+                _id=str(product.id),
+                user=str(product.user),
+                name=product.name,
+                image=product.image,
+                brand=product.brand,
+                category=product.category,
+                description=product.description,
+                rating=product.rating,
+                numReviews=product.num_reviews,
+                price=product.price,
+                countInStock=product.count_in_stock,
+                createdAt=product.created_at,
+                updatedAt=product.updated_at
+            )
+            for product in products
+        ],
+        page=page_number,
+        pages=pages
+    )
+
+
+@router.get("/{product_id}", response_model=ProductResponse)
+async def get_product_by_id(product_id: str):
+    """Fetch single product"""
+    try:
+        product = await Product.get(ObjectId(product_id))
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    return ProductResponse(
+        _id=str(product.id),
+        user=str(product.user),
+        name=product.name,
+        image=product.image,
+        brand=product.brand,
+        category=product.category,
+        description=product.description,
+        rating=product.rating,
+        numReviews=product.num_reviews,
+        price=product.price,
+        countInStock=product.count_in_stock,
+        createdAt=product.created_at,
+        updatedAt=product.updated_at
+    )
+
+
+@router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+async def create_product(
+    product_data: ProductCreate,
+    current_user: User = Depends(require_admin)
+):
+    """Create a product (Admin only)"""
+    product = Product(
+        name=product_data.name,
+        price=product_data.price,
+        user=current_user.id,
+        image=product_data.image,
+        brand=product_data.brand,
+        category=product_data.category,
+        count_in_stock=product_data.count_in_stock,
+        num_reviews=0,
+        description=product_data.description
+    )
+    
+    await product.save()
+    
+    return ProductResponse(
+        _id=str(product.id),
+        user=str(product.user),
+        name=product.name,
+        image=product.image,
+        brand=product.brand,
+        category=product.category,
+        description=product.description,
+        rating=product.rating,
+        numReviews=product.num_reviews,
+        price=product.price,
+        countInStock=product.count_in_stock,
+        createdAt=product.created_at,
+        updatedAt=product.updated_at
+    )
+
+
+@router.put("/{product_id}", response_model=ProductResponse)
+async def update_product(
+    product_id: str,
+    product_data: ProductUpdate,
+    admin_user: User = Depends(require_admin)
+):
+    """Update a product (Admin only)"""
+    try:
+        product = await Product.get(ObjectId(product_id))
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    if product_data.name:
+        product.name = product_data.name
+    if product_data.price is not None:
+        product.price = product_data.price
+    if product_data.description:
+        product.description = product_data.description
+    if product_data.image:
+        product.image = product_data.image
+    if product_data.brand:
+        product.brand = product_data.brand
+    if product_data.category:
+        product.category = product_data.category
+    if product_data.count_in_stock is not None:
+        product.count_in_stock = product_data.count_in_stock
+    
+    await product.save()
+    
+    return ProductResponse(
+        _id=str(product.id),
+        user=str(product.user),
+        name=product.name,
+        image=product.image,
+        brand=product.brand,
+        category=product.category,
+        description=product.description,
+        rating=product.rating,
+        numReviews=product.num_reviews,
+        price=product.price,
+        countInStock=product.count_in_stock,
+        createdAt=product.created_at,
+        updatedAt=product.updated_at
+    )
+
+
+@router.delete("/{product_id}")
+async def delete_product(
+    product_id: str,
+    admin_user: User = Depends(require_admin)
+):
+    """Delete a product (Admin only)"""
+    try:
+        product = await Product.get(ObjectId(product_id))
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    await product.delete()
+    
+    return {"message": "Product removed"}
+
+
+@router.post("/{product_id}/reviews", status_code=status.HTTP_201_CREATED)
+async def create_product_review(
+    product_id: str,
+    review_data: ReviewCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """Create new product review"""
+    try:
+        product = await Product.get(ObjectId(product_id))
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    # Check if user already reviewed
+    already_reviewed = any(
+        str(review.user) == str(current_user.id) 
+        for review in product.reviews
+    )
+    
+    if already_reviewed:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Product already reviewed"
+        )
+    
+    # Create review
+    review = Review(
+        name=current_user.name,
+        rating=review_data.rating,
+        comment=review_data.comment,
+        user=current_user.id
+    )
+    
+    await review.save()
+    product.reviews.append(review)
+    product.num_reviews = len(product.reviews)
+    
+    # Calculate average rating
+    if product.num_reviews > 0:
+        product.rating = sum(r.rating for r in product.reviews) / product.num_reviews
+    
+    await product.save()
+    
+    return {"message": "Review added"}

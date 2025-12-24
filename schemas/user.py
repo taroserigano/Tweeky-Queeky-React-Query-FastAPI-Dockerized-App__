@@ -1,0 +1,54 @@
+from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
+from datetime import datetime
+
+
+# Request schemas
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserRegister(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+
+
+class UserAdminUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    is_admin: Optional[bool] = Field(None, alias="isAdmin")
+
+    class Config:
+        populate_by_name = True
+
+
+# Response schemas
+class UserResponse(BaseModel):
+    id: str = Field(alias="_id")
+    name: str
+    email: EmailStr
+    is_admin: bool = Field(alias="isAdmin")
+
+    class Config:
+        populate_by_name = True
+        from_attributes = True
+
+
+class UserListResponse(BaseModel):
+    id: str = Field(alias="_id")
+    name: str
+    email: EmailStr
+    is_admin: bool = Field(alias="isAdmin")
+    created_at: datetime = Field(alias="createdAt")
+
+    class Config:
+        populate_by_name = True
+        from_attributes = True
