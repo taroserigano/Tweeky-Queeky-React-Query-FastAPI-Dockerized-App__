@@ -52,16 +52,17 @@ A production-ready, full-stack e-commerce application showcasing modern web deve
 
 ### 🐍 Backend (FastAPI - Python 3.11+)
 
-| Technology | Purpose | Why This Choice |
-|------------|---------|-----------------|
-| **FastAPI 0.115.0** | REST API Framework | ⚡ Async/await native, 3x faster than Flask, auto-generated OpenAPI docs |
-| **Beanie ODM** | MongoDB Integration | 🔄 Async MongoDB operations, Pydantic integration, relationship management |
-| **Pydantic v2** | Data Validation | 🛡️ Type-safe validation, 20x faster than v1, automatic serialization |
-| **PyJWT** | Authentication | 🔐 JWT token generation/verification with HTTP-only cookie security |
-| **Passlib + Bcrypt** | Password Security | 🔒 Industry-standard password hashing with salt rounds |
-| **Uvicorn** | ASGI Server | 🚀 High-performance async server for production deployments |
+| Technology           | Purpose             | Why This Choice                                                            |
+| -------------------- | ------------------- | -------------------------------------------------------------------------- |
+| **FastAPI 0.115.0**  | REST API Framework  | ⚡ Async/await native, 3x faster than Flask, auto-generated OpenAPI docs   |
+| **Beanie ODM**       | MongoDB Integration | 🔄 Async MongoDB operations, Pydantic integration, relationship management |
+| **Pydantic v2**      | Data Validation     | 🛡️ Type-safe validation, 20x faster than v1, automatic serialization       |
+| **PyJWT**            | Authentication      | 🔐 JWT token generation/verification with HTTP-only cookie security        |
+| **Passlib + Bcrypt** | Password Security   | 🔒 Industry-standard password hashing with salt rounds                     |
+| **Uvicorn**          | ASGI Server         | 🚀 High-performance async server for production deployments                |
 
 **Key Backend Features:**
+
 - ✅ **100% Type-Hinted** - Full type safety with mypy compatibility
 - ✅ **Async/Await Throughout** - Non-blocking I/O for high concurrency (1000+ req/sec)
 - ✅ **Dependency Injection** - FastAPI's powerful DI system for clean, testable code
@@ -70,16 +71,17 @@ A production-ready, full-stack e-commerce application showcasing modern web deve
 
 ### ⚛️ Frontend (React 18 + Modern JS Ecosystem)
 
-| Technology | Purpose | Why This Choice |
-|------------|---------|-----------------|
-| **React 18.2** | UI Framework | ⚡ Concurrent rendering, automatic batching, improved performance |
-| **Redux Toolkit** | State Management | 🎯 Modern Redux with less boilerplate, built-in best practices |
-| **RTK Query** | Data Fetching | 🔄 Automatic caching, invalidation, polling, optimistic updates |
-| **React Router v6** | Routing | 🛣️ Modern routing with hooks, nested routes, code splitting |
-| **React Bootstrap 5** | UI Components | 🎨 Responsive design, pre-built components, customizable themes |
-| **Axios** | HTTP Client | 📡 Interceptors, request/response transformation, CSRF protection |
+| Technology            | Purpose          | Why This Choice                                                   |
+| --------------------- | ---------------- | ----------------------------------------------------------------- |
+| **React 18.2**        | UI Framework     | ⚡ Concurrent rendering, automatic batching, improved performance |
+| **Redux Toolkit**     | State Management | 🎯 Modern Redux with less boilerplate, built-in best practices    |
+| **RTK Query**         | Data Fetching    | 🔄 Automatic caching, invalidation, polling, optimistic updates   |
+| **React Router v6**   | Routing          | 🛣️ Modern routing with hooks, nested routes, code splitting       |
+| **React Bootstrap 5** | UI Components    | 🎨 Responsive design, pre-built components, customizable themes   |
+| **Axios**             | HTTP Client      | 📡 Interceptors, request/response transformation, CSRF protection |
 
 **Key Frontend Features:**
+
 - ✅ **Modern React Patterns** - Hooks, context, custom hooks for reusable logic
 - ✅ **Redux Toolkit Slices** - Organized state management with createSlice & createAsyncThunk
 - ✅ **Optimistic UI Updates** - Instant feedback with automatic rollback on errors
@@ -88,15 +90,16 @@ A production-ready, full-stack e-commerce application showcasing modern web deve
 
 ### 🗄️ Database & Infrastructure
 
-| Technology | Purpose | Why This Choice |
-|------------|---------|-----------------|
-| **MongoDB Atlas 7.0** | NoSQL Database | 📊 Document-based storage, horizontal scaling, cloud-managed |
-| **Docker 24.0** | Containerization | 📦 Consistent environments, easy deployment, microservices architecture |
-| **Docker Compose** | Orchestration | 🎼 Multi-container management, service dependencies, networking |
-| **Nginx** | Reverse Proxy | 🌐 Static file serving, load balancing, SSL termination |
-| **PayPal SDK** | Payment Processing | 💳 Secure transactions, sandbox testing, order management |
+| Technology            | Purpose            | Why This Choice                                                         |
+| --------------------- | ------------------ | ----------------------------------------------------------------------- |
+| **MongoDB Atlas 7.0** | NoSQL Database     | 📊 Document-based storage, horizontal scaling, cloud-managed            |
+| **Docker 24.0**       | Containerization   | 📦 Consistent environments, easy deployment, microservices architecture |
+| **Docker Compose**    | Orchestration      | 🎼 Multi-container management, service dependencies, networking         |
+| **Nginx**             | Reverse Proxy      | 🌐 Static file serving, load balancing, SSL termination                 |
+| **PayPal SDK**        | Payment Processing | 💳 Secure transactions, sandbox testing, order management               |
 
 **Architecture Highlights:**
+
 - ✅ **Microservices Design** - Separate containers for frontend, backend, database
 - ✅ **Cloud-Ready** - MongoDB Atlas for scalable, managed database hosting
 - ✅ **Production Optimized** - Multi-stage Docker builds, minimized image sizes
@@ -107,6 +110,7 @@ A production-ready, full-stack e-commerce application showcasing modern web deve
 ## 🔥 Advanced Features
 
 ### Backend Capabilities
+
 - **Beanie Link Relationships** - Proper document references with automatic population
 - **Async MongoDB Queries** - Non-blocking database operations with connection pooling
 - **Pagination & Filtering** - Efficient query optimization with index support
@@ -114,6 +118,7 @@ A production-ready, full-stack e-commerce application showcasing modern web deve
 - **PayPal Webhook Integration** - Real-time payment status updates
 
 ### Frontend Capabilities
+
 - **Shopping Cart Persistence** - LocalStorage + Redux for cart state management
 - **Order History Tracking** - Complete order lifecycle from creation to delivery
 - **Product Reviews System** - Star ratings with append-only review architecture
@@ -149,6 +154,7 @@ docker exec tweeky-queeky-fastapi python seeder.py
 ```
 
 **Default Admin Credentials:**
+
 - Email: `admin@email.com`
 - Password: `123456`
 
@@ -192,13 +198,13 @@ npm start
 
 ### 📋 Prerequisites
 
-| Requirement | Version | Purpose |
-|------------|---------|---------|
-| **Docker** | 24.0+ | Container runtime |
-| **Docker Compose** | 2.0+ | Multi-container orchestration |
-| **Python** | 3.11+ | Backend development |
-| **Node.js** | 18+ | Frontend development |
-| **MongoDB Atlas Account** | Free Tier | Cloud database hosting |
+| Requirement               | Version   | Purpose                       |
+| ------------------------- | --------- | ----------------------------- |
+| **Docker**                | 24.0+     | Container runtime             |
+| **Docker Compose**        | 2.0+      | Multi-container orchestration |
+| **Python**                | 3.11+     | Backend development           |
+| **Node.js**               | 18+       | Frontend development          |
+| **MongoDB Atlas Account** | Free Tier | Cloud database hosting        |
 
 ## 📁 Project Structure
 
@@ -410,12 +416,14 @@ ruff check .
 ## 📊 Technical Specifications
 
 **Performance Metrics:**
+
 - ⚡ API Response Time: <50ms (average)
 - 🚀 Frontend Load Time: <1.5s (LCP)
 - 📈 Concurrent Users: 1000+ supported
 - 💾 Database Queries: Optimized with indexes
 
 **Code Quality:**
+
 - ✅ Type Safety: 100% type-hinted Python
 - ✅ Test Coverage: 97.1% (35/35 tests passing)
 - ✅ Code Style: Black formatter, Ruff linter
