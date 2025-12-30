@@ -4,8 +4,8 @@
  * Run this after starting the backend server
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Container, Card, Alert, Form, Badge } from 'react-bootstrap';
+import React, { useState, useEffect, useCallback } from "react";
+import { Button, Container, Card, Alert, Form, Badge } from "react-bootstrap";
 import {
   // Product hooks
   useProducts,
@@ -17,15 +17,15 @@ import {
   // User hooks
   useLogin,
   useUsers,
-} from '../hooks';
-import { useSelector } from 'react-redux';
+} from "../hooks";
+import { useSelector } from "react-redux";
 
 const ReactQueryTest = () => {
   const [testResults, setTestResults] = useState([]);
-  const [currentTest, setCurrentTest] = useState('');
+  const [currentTest, setCurrentTest] = useState("");
   const [testData, setTestData] = useState({
-    email: 'test@test.com',
-    password: 'test123',
+    email: "test@test.com",
+    password: "test123",
     productId: null,
     orderId: null,
     userId: null,
@@ -37,11 +37,11 @@ const ReactQueryTest = () => {
   const { data: products, isLoading: productsLoading } = useProducts();
   const { data: topProducts } = useTopProducts();
   const { mutate: createProduct } = useCreateProduct();
-  
+
   // Order hooks
   const { data: myOrders } = useMyOrders();
   const { data: allOrders } = useOrders();
-  
+
   // User hooks
   const { mutate: login } = useLogin();
   const { data: allUsers } = useUsers();
@@ -55,36 +55,48 @@ const ReactQueryTest = () => {
 
   // Test 1: Fetch all products
   const testFetchProducts = useCallback(() => {
-    setCurrentTest('Fetching products...');
+    setCurrentTest("Fetching products...");
     if (products && products.products && products.products.length > 0) {
-      addResult('Fetch Products', 'success', `Found ${products.products.length} products`);
+      addResult(
+        "Fetch Products",
+        "success",
+        `Found ${products.products.length} products`
+      );
       setTestData((prev) => ({ ...prev, productId: products.products[0]._id }));
     } else if (!productsLoading) {
-      addResult('Fetch Products', 'warning', 'No products found');
+      addResult("Fetch Products", "warning", "No products found");
     }
   }, [products, productsLoading]);
 
   // Test 2: Fetch top products
   const testTopProducts = useCallback(() => {
-    setCurrentTest('Fetching top products...');
+    setCurrentTest("Fetching top products...");
     if (topProducts && topProducts.length > 0) {
-      addResult('Fetch Top Products', 'success', `Found ${topProducts.length} top products`);
+      addResult(
+        "Fetch Top Products",
+        "success",
+        `Found ${topProducts.length} top products`
+      );
     } else {
-      addResult('Fetch Top Products', 'warning', 'No top products found');
+      addResult("Fetch Top Products", "warning", "No top products found");
     }
   }, [topProducts]);
 
   // Test 3: User login
   const testLogin = () => {
-    setCurrentTest('Testing login...');
+    setCurrentTest("Testing login...");
     login(
       { email: testData.email, password: testData.password },
       {
         onSuccess: (res) => {
-          addResult('User Login', 'success', `Logged in as ${res.name}`);
+          addResult("User Login", "success", `Logged in as ${res.name}`);
         },
         onError: (err) => {
-          addResult('User Login', 'error', err?.response?.data?.detail || 'Login failed');
+          addResult(
+            "User Login",
+            "error",
+            err?.response?.data?.detail || "Login failed"
+          );
         },
       }
     );
@@ -92,13 +104,17 @@ const ReactQueryTest = () => {
 
   // Test 4: Fetch my orders
   const testMyOrders = () => {
-    setCurrentTest('Fetching my orders...');
+    setCurrentTest("Fetching my orders...");
     if (!userInfo) {
-      addResult('Fetch My Orders', 'warning', 'User not logged in');
+      addResult("Fetch My Orders", "warning", "User not logged in");
       return;
     }
     if (myOrders) {
-      addResult('Fetch My Orders', 'success', `Found ${myOrders.length} orders`);
+      addResult(
+        "Fetch My Orders",
+        "success",
+        `Found ${myOrders.length} orders`
+      );
       if (myOrders.length > 0) {
         setTestData((prev) => ({ ...prev, orderId: myOrders[0]._id }));
       }
@@ -107,44 +123,56 @@ const ReactQueryTest = () => {
 
   // Test 5: Fetch all users (admin)
   const testFetchUsers = () => {
-    setCurrentTest('Fetching all users...');
+    setCurrentTest("Fetching all users...");
     if (!userInfo || !userInfo.isAdmin) {
-      addResult('Fetch Users', 'warning', 'User is not admin');
+      addResult("Fetch Users", "warning", "User is not admin");
       return;
     }
     if (allUsers) {
-      addResult('Fetch Users', 'success', `Found ${allUsers.length} users`);
+      addResult("Fetch Users", "success", `Found ${allUsers.length} users`);
     }
   };
 
   // Test 6: Fetch all orders (admin)
   const testFetchAllOrders = () => {
-    setCurrentTest('Fetching all orders...');
+    setCurrentTest("Fetching all orders...");
     if (!userInfo || !userInfo.isAdmin) {
-      addResult('Fetch All Orders', 'warning', 'User is not admin');
+      addResult("Fetch All Orders", "warning", "User is not admin");
       return;
     }
     if (allOrders) {
-      addResult('Fetch All Orders', 'success', `Found ${allOrders.length} orders`);
+      addResult(
+        "Fetch All Orders",
+        "success",
+        `Found ${allOrders.length} orders`
+      );
     }
   };
 
   // Test 7: Create a test product (admin)
   const testCreateProduct = () => {
-    setCurrentTest('Creating test product...');
+    setCurrentTest("Creating test product...");
     if (!userInfo || !userInfo.isAdmin) {
-      addResult('Create Product', 'warning', 'User is not admin');
+      addResult("Create Product", "warning", "User is not admin");
       return;
     }
     createProduct(
       {},
       {
         onSuccess: (res) => {
-          addResult('Create Product', 'success', `Created product: ${res.name}`);
+          addResult(
+            "Create Product",
+            "success",
+            `Created product: ${res.name}`
+          );
           setTestData((prev) => ({ ...prev, productId: res._id }));
         },
         onError: (err) => {
-          addResult('Create Product', 'error', err?.response?.data?.detail || 'Failed to create product');
+          addResult(
+            "Create Product",
+            "error",
+            err?.response?.data?.detail || "Failed to create product"
+          );
         },
       }
     );
@@ -153,17 +181,17 @@ const ReactQueryTest = () => {
   // Run all automated tests
   const runAllTests = () => {
     setTestResults([]);
-    setCurrentTest('Running all tests...');
-    
+    setCurrentTest("Running all tests...");
+
     // Run tests in sequence with delays
     setTimeout(() => testFetchProducts(), 500);
     setTimeout(() => testTopProducts(), 1000);
     setTimeout(() => testMyOrders(), 1500);
     setTimeout(() => testFetchUsers(), 2000);
     setTimeout(() => testFetchAllOrders(), 2500);
-    
+
     setTimeout(() => {
-      setCurrentTest('All tests completed!');
+      setCurrentTest("All tests completed!");
     }, 3000);
   };
 
@@ -189,8 +217,8 @@ const ReactQueryTest = () => {
 
       <Card className="mb-3">
         <Card.Header>
-          <strong>Current Status:</strong>{' '}
-          <Badge bg="info">{currentTest || 'Ready'}</Badge>
+          <strong>Current Status:</strong>{" "}
+          <Badge bg="info">{currentTest || "Ready"}</Badge>
         </Card.Header>
         <Card.Body>
           <div className="d-flex gap-2 flex-wrap">
@@ -222,7 +250,7 @@ const ReactQueryTest = () => {
               variant="danger"
               onClick={() => {
                 setTestResults([]);
-                setCurrentTest('');
+                setCurrentTest("");
               }}
             >
               Clear Results
@@ -232,7 +260,11 @@ const ReactQueryTest = () => {
           {userInfo && (
             <Alert variant="success" className="mt-3 mb-0">
               Logged in as: <strong>{userInfo.name}</strong> ({userInfo.email})
-              {userInfo.isAdmin && <Badge bg="danger" className="ms-2">Admin</Badge>}
+              {userInfo.isAdmin && (
+                <Badge bg="danger" className="ms-2">
+                  Admin
+                </Badge>
+              )}
             </Alert>
           )}
           {!userInfo && (
@@ -270,8 +302,8 @@ const ReactQueryTest = () => {
               />
             </Form.Group>
             <small className="text-muted">
-              Current Product ID: {testData.productId || 'None'} | Order ID:{' '}
-              {testData.orderId || 'None'}
+              Current Product ID: {testData.productId || "None"} | Order ID:{" "}
+              {testData.orderId || "None"}
             </small>
           </Form>
         </Card.Body>
@@ -279,18 +311,20 @@ const ReactQueryTest = () => {
 
       <h3>Test Results</h3>
       {testResults.length === 0 ? (
-        <Alert variant="info">No tests run yet. Click a button above to start testing.</Alert>
+        <Alert variant="info">
+          No tests run yet. Click a button above to start testing.
+        </Alert>
       ) : (
         <div className="d-flex flex-column gap-2">
           {testResults.map((result, index) => (
             <Alert
               key={index}
               variant={
-                result.status === 'success'
-                  ? 'success'
-                  : result.status === 'error'
-                  ? 'danger'
-                  : 'warning'
+                result.status === "success"
+                  ? "success"
+                  : result.status === "error"
+                  ? "danger"
+                  : "warning"
               }
             >
               <div className="d-flex justify-content-between align-items-center">

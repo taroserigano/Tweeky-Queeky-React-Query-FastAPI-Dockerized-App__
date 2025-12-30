@@ -1,28 +1,20 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import Message from '../../components/Message';
-import Loader from '../../components/Loader';
-import FormContainer from '../../components/FormContainer';
-import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
-import {
-  useUserDetails,
-  useUpdateUser,
-} from '../../hooks';
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
+import Message from "../../components/Message";
+import Loader from "../../components/Loader";
+import FormContainer from "../../components/FormContainer";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { useUserDetails, useUpdateUser } from "../../hooks";
 
 const UserEditScreen = () => {
   const { id: userId } = useParams();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const {
-    data: user,
-    isLoading,
-    error,
-    refetch,
-  } = useUserDetails(userId);
+  const { data: user, isLoading, error, refetch } = useUserDetails(userId);
 
   const { mutate: updateUser, isPending: loadingUpdate } = useUpdateUser();
 
@@ -34,9 +26,9 @@ const UserEditScreen = () => {
       { userId, name, email, isAdmin },
       {
         onSuccess: () => {
-          toast.success('user updated successfully');
+          toast.success("user updated successfully");
           refetch();
-          navigate('/admin/userlist');
+          navigate("/admin/userlist");
         },
         onError: (err) => {
           toast.error(err?.response?.data?.detail || err.message);
@@ -55,7 +47,7 @@ const UserEditScreen = () => {
 
   return (
     <>
-      <Link to='/admin/userlist' className='btn btn-light my-3'>
+      <Link to="/admin/userlist" className="btn btn-light my-3">
         Go Back
       </Link>
       <FormContainer>
@@ -64,41 +56,41 @@ const UserEditScreen = () => {
         {isLoading ? (
           <Loader />
         ) : error ? (
-          <Message variant='danger'>
+          <Message variant="danger">
             {error?.data?.message || error.error}
           </Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group className='my-2' controlId='name'>
+            <Form.Group className="my-2" controlId="name">
               <Form.Label>Name</Form.Label>
               <Form.Control
-                type='name'
-                placeholder='Enter name'
+                type="name"
+                placeholder="Enter name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group className='my-2' controlId='email'>
+            <Form.Group className="my-2" controlId="email">
               <Form.Label>Email Address</Form.Label>
               <Form.Control
-                type='email'
-                placeholder='Enter email'
+                type="email"
+                placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group className='my-2' controlId='isadmin'>
+            <Form.Group className="my-2" controlId="isadmin">
               <Form.Check
-                type='checkbox'
-                label='Is Admin'
+                type="checkbox"
+                label="Is Admin"
                 checked={isAdmin}
                 onChange={(e) => setIsAdmin(e.target.checked)}
               ></Form.Check>
             </Form.Group>
 
-            <Button type='submit' variant='primary'>
+            <Button type="submit" variant="primary">
               Update
             </Button>
           </Form>

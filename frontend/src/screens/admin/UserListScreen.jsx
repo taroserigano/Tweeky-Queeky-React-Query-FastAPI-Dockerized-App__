@@ -1,14 +1,11 @@
-import React from 'react';
-import { Table, Button } from 'react-bootstrap';
-import { FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
-import Message from '../../components/Message';
-import Loader from '../../components/Loader';
-import {
-  useDeleteUser,
-  useUsers,
-} from '../../hooks';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Table, Button } from "react-bootstrap";
+import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import Message from "../../components/Message";
+import Loader from "../../components/Loader";
+import { useDeleteUser, useUsers } from "../../hooks";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const UserListScreen = () => {
   const { data: users, refetch, isLoading, error } = useUsers();
@@ -16,11 +13,11 @@ const UserListScreen = () => {
   const { mutate: deleteUser } = useDeleteUser();
 
   const deleteHandler = async (id) => {
-    if (window.confirm('Are you sure')) {
+    if (window.confirm("Are you sure")) {
       deleteUser(id, {
         onSuccess: () => {
           refetch();
-          toast.success('User deleted');
+          toast.success("User deleted");
         },
         onError: (err) => {
           toast.error(err?.response?.data?.detail || err.message);
@@ -35,11 +32,11 @@ const UserListScreen = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>
+        <Message variant="danger">
           {error?.data?.message || error.error}
         </Message>
       ) : (
-        <Table striped bordered hover responsive className='table-sm'>
+        <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
               <th>ID</th>
@@ -59,9 +56,9 @@ const UserListScreen = () => {
                 </td>
                 <td>
                   {user.isAdmin ? (
-                    <FaCheck style={{ color: 'green' }} />
+                    <FaCheck style={{ color: "green" }} />
                   ) : (
-                    <FaTimes style={{ color: 'red' }} />
+                    <FaTimes style={{ color: "red" }} />
                   )}
                 </td>
                 <td>
@@ -70,18 +67,18 @@ const UserListScreen = () => {
                       <Button
                         as={Link}
                         to={`/admin/user/${user._id}/edit`}
-                        style={{ marginRight: '10px' }}
-                        variant='light'
-                        className='btn-sm'
+                        style={{ marginRight: "10px" }}
+                        variant="light"
+                        className="btn-sm"
                       >
                         <FaEdit />
                       </Button>
                       <Button
-                        variant='danger'
-                        className='btn-sm'
+                        variant="danger"
+                        className="btn-sm"
                         onClick={() => deleteHandler(user._id)}
                       >
-                        <FaTrash style={{ color: 'white' }} />
+                        <FaTrash style={{ color: "white" }} />
                       </Button>
                     </>
                   )}

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Form, Button } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SearchBox = () => {
   const navigate = useNavigate();
   const { keyword: urlKeyword } = useParams();
 
-  const [keyword, setKeyword] = useState(urlKeyword || '');
+  const [keyword, setKeyword] = useState(urlKeyword || "");
   const [debouncedKeyword, setDebouncedKeyword] = useState(keyword);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const SearchBox = () => {
     if (debouncedKeyword) {
       navigate(`/search/${debouncedKeyword.trim()}`);
     } else if (urlKeyword) {
-      navigate('/');
+      navigate("/");
     }
   }, [debouncedKeyword, navigate, urlKeyword]);
 
@@ -33,24 +33,24 @@ const SearchBox = () => {
     if (keyword) {
       navigate(`/search/${keyword.trim()}`);
     } else {
-      navigate('/');
+      navigate("/");
     }
   };
 
   return (
-    <Form onSubmit={submitHandler} className='search-box-form'>
+    <Form onSubmit={submitHandler} className="search-box-form">
       <Form.Control
-        type='text'
-        name='q'
+        type="text"
+        name="q"
         onChange={(e) => setKeyword(e.target.value)}
         value={keyword}
-        placeholder='Search products'
-        className='search-box-input'
+        placeholder="Search products"
+        className="search-box-input"
       />
       <Button
-        type='submit'
-        variant='outline-light'
-        className='search-box-button'
+        type="submit"
+        variant="outline-light"
+        className="search-box-button"
       >
         Search
       </Button>

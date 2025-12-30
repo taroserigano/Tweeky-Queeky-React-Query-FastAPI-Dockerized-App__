@@ -5,16 +5,16 @@ import {
   NavDropdown,
   Badge,
   Button,
-} from 'react-bootstrap';
-import { FaShoppingCart, FaUser, FaMoon, FaSun } from 'react-icons/fa';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { useLogout } from '../hooks';
-import { logout } from '../slices/authSlice';
-import logo from '../assets/logo.svg';
-import { resetCart } from '../slices/cartSlice';
+} from "react-bootstrap";
+import { FaShoppingCart, FaUser, FaMoon, FaSun } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { useLogout } from "../hooks";
+import { logout } from "../slices/authSlice";
+import logo from "../assets/logo.svg";
+import { resetCart } from "../slices/cartSlice";
 
-const Header = ({ theme = 'light', onToggleTheme }) => {
+const Header = ({ theme = "light", onToggleTheme }) => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -30,10 +30,10 @@ const Header = ({ theme = 'light', onToggleTheme }) => {
         onSuccess: () => {
           dispatch(logout());
           dispatch(resetCart());
-          navigate('/login');
+          navigate("/login");
         },
         onError: (err) => {
-          console.error('Logout failed:', err);
+          console.error("Logout failed:", err);
         },
       }
     );
@@ -42,40 +42,40 @@ const Header = ({ theme = 'light', onToggleTheme }) => {
   return (
     <header>
       <Navbar
-        variant='dark'
-        expand='lg'
+        variant="dark"
+        expand="lg"
         collapseOnSelect
-        className='navbar-modern'
+        className="navbar-modern"
       >
         <Container>
           <Navbar.Brand
             as={Link}
-            to='/'
-            className='brand-mark'
-            style={{ gap: '24px' }}
+            to="/"
+            className="brand-mark"
+            style={{ gap: "24px" }}
           >
-            <img src={logo} alt='Tweeky Queeky' className='brand-mark__logo' />
+            <img src={logo} alt="Tweeky Queeky" className="brand-mark__logo" />
             Tweeky Queeky
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
-            id='basic-navbar-nav'
-            className='justify-content-lg-end'
+            id="basic-navbar-nav"
+            className="justify-content-lg-end"
           >
-            <Nav className='align-items-lg-center gap-2'>
+            <Nav className="align-items-lg-center gap-2">
               <Button
-                variant='outline-light'
-                size='sm'
-                className='nav-pill theme-toggle-btn'
+                variant="outline-light"
+                size="sm"
+                className="nav-pill theme-toggle-btn"
                 onClick={onToggleTheme}
               >
-                {theme === 'dark' ? <FaSun /> : <FaMoon />}{' '}
-                {theme === 'dark' ? 'Light' : 'Dark'}
+                {theme === "dark" ? <FaSun /> : <FaMoon />}{" "}
+                {theme === "dark" ? "Light" : "Dark"}
               </Button>
-              <Nav.Link as={Link} to='/cart' className='nav-pill'>
+              <Nav.Link as={Link} to="/cart" className="nav-pill">
                 <FaShoppingCart /> Cart
                 {cartItems.length > 0 && (
-                  <Badge pill bg='success' style={{ marginLeft: '5px' }}>
+                  <Badge pill bg="success" style={{ marginLeft: "5px" }}>
                     {cartItems.reduce((a, c) => a + c.qty, 0)}
                   </Badge>
                 )}
@@ -84,11 +84,11 @@ const Header = ({ theme = 'light', onToggleTheme }) => {
                 <>
                   <NavDropdown
                     title={userInfo.name}
-                    id='username'
-                    className='nav-pill'
-                    menuVariant='dark'
+                    id="username"
+                    className="nav-pill"
+                    menuVariant="dark"
                   >
-                    <NavDropdown.Item as={Link} to='/profile'>
+                    <NavDropdown.Item as={Link} to="/profile">
                       Profile
                     </NavDropdown.Item>
                     <NavDropdown.Item onClick={logoutHandler}>
@@ -97,25 +97,25 @@ const Header = ({ theme = 'light', onToggleTheme }) => {
                   </NavDropdown>
                 </>
               ) : (
-                <Nav.Link as={Link} to='/login' className='nav-pill'>
+                <Nav.Link as={Link} to="/login" className="nav-pill">
                   <FaUser /> Sign In
                 </Nav.Link>
               )}
 
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown
-                  title='Admin'
-                  id='adminmenu'
-                  className='nav-pill'
-                  menuVariant='dark'
+                  title="Admin"
+                  id="adminmenu"
+                  className="nav-pill"
+                  menuVariant="dark"
                 >
-                  <NavDropdown.Item as={Link} to='/admin/productlist'>
+                  <NavDropdown.Item as={Link} to="/admin/productlist">
                     Products
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to='/admin/orderlist'>
+                  <NavDropdown.Item as={Link} to="/admin/orderlist">
                     Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to='/admin/userlist'>
+                  <NavDropdown.Item as={Link} to="/admin/userlist">
                     Users
                   </NavDropdown.Item>
                 </NavDropdown>

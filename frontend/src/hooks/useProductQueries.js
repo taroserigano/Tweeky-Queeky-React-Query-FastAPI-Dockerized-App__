@@ -1,20 +1,20 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import { BASE_URL, PRODUCTS_URL } from '../constants';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { BASE_URL, PRODUCTS_URL } from "../constants";
 
 const api = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
 
-export const useProducts = (keyword = '', pageNumber = 1) => {
+export const useProducts = (keyword = "", pageNumber = 1) => {
   return useQuery({
-    queryKey: ['products', keyword, pageNumber],
+    queryKey: ["products", keyword, pageNumber],
     queryFn: async () => {
       const params = {};
       if (keyword) params.keyword = keyword;
       if (pageNumber) params.pageNumber = pageNumber;
-      
+
       const { data } = await api.get(PRODUCTS_URL, { params });
       return data;
     },
@@ -23,7 +23,7 @@ export const useProducts = (keyword = '', pageNumber = 1) => {
 
 export const useProductDetails = (productId) => {
   return useQuery({
-    queryKey: ['product', productId],
+    queryKey: ["product", productId],
     queryFn: async () => {
       const { data } = await api.get(`${PRODUCTS_URL}/${productId}`);
       return data;
@@ -34,7 +34,7 @@ export const useProductDetails = (productId) => {
 
 export const useTopProducts = () => {
   return useQuery({
-    queryKey: ['products', 'top'],
+    queryKey: ["products", "top"],
     queryFn: async () => {
       const { data } = await api.get(`${PRODUCTS_URL}/top`);
       return data;
@@ -44,7 +44,7 @@ export const useTopProducts = () => {
 
 export const useCreateReview = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ productId, rating, comment }) => {
       const { data } = await api.post(`${PRODUCTS_URL}/${productId}/reviews`, {
@@ -54,51 +54,51 @@ export const useCreateReview = () => {
       return data;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries(['product', variables.productId]);
-      queryClient.invalidateQueries(['products']);
+      queryClient.invalidateQueries(["product", variables.productId]);
+      queryClient.invalidateQueries(["products"]);
     },
   });
 };
 
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (product) => {
       const { data } = await api.post(PRODUCTS_URL, product);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['products']);
+      queryClient.invalidateQueries(["products"]);
     },
   });
 };
 
 export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ productId, ...product }) => {
       const { data } = await api.put(`${PRODUCTS_URL}/${productId}`, product);
       return data;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries(['product', variables.productId]);
-      queryClient.invalidateQueries(['products']);
+      queryClient.invalidateQueries(["product", variables.productId]);
+      queryClient.invalidateQueries(["products"]);
     },
   });
 };
 
 export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (productId) => {
       const { data } = await api.delete(`${PRODUCTS_URL}/${productId}`);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['products']);
+      queryClient.invalidateQueries(["products"]);
     },
   });
 };
@@ -106,9 +106,9 @@ export const useDeleteProduct = () => {
 export const useUploadProductImage = () => {
   return useMutation({
     mutationFn: async (formData) => {
-      const { data } = await api.post('/api/upload', formData, {
+      const { data } = await api.post("/api/upload", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
       return data;

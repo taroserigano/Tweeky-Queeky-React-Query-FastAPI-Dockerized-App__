@@ -1,5 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tantml:parameter>
-<parameter name="query">
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { BASE_URL, ORDERS_URL, PAYPAL_URL } from '../constants';
 

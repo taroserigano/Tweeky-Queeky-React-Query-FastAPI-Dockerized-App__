@@ -1,27 +1,22 @@
-import { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 import {
   useOrderDetails,
   usePayOrder,
   usePayPalClientId,
   useDeliverOrder,
-} from '../hooks/useOrderQueries';
+} from "../hooks/useOrderQueries";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
 
-  const {
-    data: order,
-    refetch,
-    isLoading,
-    error,
-  } = useOrderDetails(orderId);
+  const { data: order, refetch, isLoading, error } = useOrderDetails(orderId);
 
   const { mutate: payOrder, isLoading: loadingPay } = usePayOrder();
 
@@ -41,13 +36,13 @@ const OrderScreen = () => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
       const loadPaypalScript = async () => {
         paypalDispatch({
-          type: 'resetOptions',
+          type: "resetOptions",
           value: {
-            'client-id': paypal.clientId,
-            currency: 'USD',
+            "client-id": paypal.clientId,
+            currency: "USD",
           },
         });
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
       };
       if (order && !order.isPaid) {
         if (!window.paypal) {
@@ -64,7 +59,7 @@ const OrderScreen = () => {
         {
           onSuccess: () => {
             refetch();
-            toast.success('Order is paid');
+            toast.success("Order is paid");
           },
           onError: (err) => {
             toast.error(err?.response?.data?.detail || err.message);
@@ -96,7 +91,7 @@ const OrderScreen = () => {
     deliverOrder(orderId, {
       onSuccess: () => {
         refetch();
-        toast.success('Order delivered');
+        toast.success("Order delivered");
       },
       onError: (err) => {
         toast.error(err?.response?.data?.detail || err.message);
@@ -107,34 +102,34 @@ const OrderScreen = () => {
   return isLoading ? (
     <Loader />
   ) : error ? (
-    <Message variant='danger'>{error.data.message}</Message>
+    <Message variant="danger">{error.data.message}</Message>
   ) : (
     <>
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
-          <ListGroup variant='flush'>
+          <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
                 <strong>Name: </strong> {order.user.name}
               </p>
               <p>
-                <strong>Email: </strong>{' '}
+                <strong>Email: </strong>{" "}
                 <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
               </p>
               <p>
                 <strong>Address:</strong>
-                {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
-                {order.shippingAddress.postalCode},{' '}
+                {order.shippingAddress.address}, {order.shippingAddress.city}{" "}
+                {order.shippingAddress.postalCode},{" "}
                 {order.shippingAddress.country}
               </p>
               {order.isDelivered ? (
-                <Message variant='success'>
+                <Message variant="success">
                   Delivered on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message variant='danger'>Not Delivered</Message>
+                <Message variant="danger">Not Delivered</Message>
               )}
             </ListGroup.Item>
 
@@ -145,9 +140,9 @@ const OrderScreen = () => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant='success'>Paid on {order.paidAt}</Message>
+                <Message variant="success">Paid on {order.paidAt}</Message>
               ) : (
-                <Message variant='danger'>Not Paid</Message>
+                <Message variant="danger">Not Paid</Message>
               )}
             </ListGroup.Item>
 
@@ -156,7 +151,7 @@ const OrderScreen = () => {
               {order.orderItems.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
-                <ListGroup variant='flush'>
+                <ListGroup variant="flush">
                   {order.orderItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
@@ -186,7 +181,7 @@ const OrderScreen = () => {
         </Col>
         <Col md={4}>
           <Card>
-            <ListGroup variant='flush'>
+            <ListGroup variant="flush">
               <ListGroup.Item>
                 <h2>Order Summary</h2>
               </ListGroup.Item>
@@ -242,8 +237,8 @@ const OrderScreen = () => {
                 !order.isDelivered && (
                   <ListGroup.Item>
                     <Button
-                      type='button'
-                      className='btn btn-block'
+                      type="button"
+                      className="btn btn-block"
                       onClick={deliverHandler}
                     >
                       Mark As Delivered

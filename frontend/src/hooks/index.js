@@ -8,7 +8,7 @@ export {
   useMyOrders,
   useOrders,
   useDeliverOrder,
-} from './useOrderQueries';
+} from "./useOrderQueries";
 
 export {
   useProducts,
@@ -19,7 +19,7 @@ export {
   useUpdateProduct,
   useDeleteProduct,
   useUploadProductImage,
-} from './useProductQueries';
+} from "./useProductQueries";
 
 export {
   useLogin,
@@ -30,5 +30,4 @@ export {
   useUserDetails,
   useDeleteUser,
   useUpdateUser,
-} from './useUserQueries';
-
+} from "./useUserQueries";
